@@ -1,0 +1,98 @@
+<!-- public/index.html --><!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Fire UID Lookup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    form {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    input {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      background-color: #ffb300;
+      color: #0f0f0f;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #ffa000;
+    }
+    .card {
+      background-color: #1f1f1f;
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #ffb300;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Free Fire Player Lookup</h1>
+  <form id="uidForm">
+    <input type="text" id="uidInput" placeholder="Enter UID" required />
+    <button type="submit">Search</button>
+  </form>
+  <div id="result"></div>  <script>
+    document.getElementById('uidForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const uid = document.getElementById('uidInput').value.trim();
+      const resultBox = document.getElementById('result');
+      resultBox.innerHTML = '<p>Loading...</p>';
+
+      try {
+        const res = await fetch(`/api/player/${uid}`);
+        const data = await res.json();
+
+        if (res.ok) {
+          resultBox.innerHTML = `
+            <div class="card">
+              <h2>${data.name}</h2>
+              <p><strong>UID:</strong> ${data.uid}</p>
+              <p><strong>Level:</strong> ${data.level}</p>
+              <p><strong>Rank:</strong> ${data.rank}</p>
+              <p><strong>Kills:</strong> ${data.kills}</p>
+              <p><strong>Matches:</strong> ${data.matches}</p>
+            </div>
+          `;
+        } else {
+          resultBox.innerHTML = `<p class="error">${data.error || "Player not found."}</p>`;
+        }
+      } catch (err) {
+        resultBox.innerHTML = `<p class="error">Error connecting to server.</p>`;
+      }
+    });
+  </script></body>
+</html>
