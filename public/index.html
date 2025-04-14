@@ -1,4 +1,6 @@
-<!-- public/index.html --><!DOCTYPE html><html lang="en">
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -65,7 +67,9 @@
     <input type="text" id="uidInput" placeholder="Enter UID" required />
     <button type="submit">Search</button>
   </form>
-  <div id="result"></div>  <script>
+  <div id="result"></div>
+
+  <script>
     document.getElementById('uidForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const uid = document.getElementById('uidInput').value.trim();
@@ -94,5 +98,6 @@
         resultBox.innerHTML = `<p class="error">Error connecting to server.</p>`;
       }
     });
-  </script></body>
+  </script>
+</body>
 </html>
