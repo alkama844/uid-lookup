@@ -77,7 +77,7 @@
       resultBox.innerHTML = '<p>Loading...</p>';
 
       try {
-        const res = await fetch(`/api/player/${uid}`);
+        const res = await fetch(`/api/player?uid=${uid}`);
         const data = await res.json();
 
         if (res.ok) {
